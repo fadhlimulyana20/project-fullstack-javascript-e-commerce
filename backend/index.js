@@ -10,11 +10,14 @@ app.use(require('./src/middleware/cors'));
 
 
 
+
 // Routes
 const adminAuthRoutes = require('./src/routes/adminAuth');
 const categoryRoutes = require('./src/routes/category');
+const productRoutes = require('./src/routes/product');
 app.use('/api/admin', adminAuthRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/products', productRoutes);
 
 app.get('/', (req, res) => {
 	res.send('API is running');
