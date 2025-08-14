@@ -11,7 +11,15 @@ import AboutPage from './AboutPage.jsx';
 import AdminLogin from './AdminLogin.jsx';
 import AdminRegister from './AdminRegister.jsx';
 
+
+
 import AdminDashboard from './AdminDashboard.jsx';
+import ProductManagement from './ProductManagement.jsx';
+import CategoryManagement from './CategoryManagement.jsx';
+import AdminManagement from './AdminManagement.jsx';
+import AdminLayout from './AdminLayout.jsx';
+
+
 
 const router = createBrowserRouter([
   {
@@ -31,8 +39,14 @@ const router = createBrowserRouter([
     element: <AdminRegister />,
   },
   {
-    path: '/admin/dashboard',
-    element: <AdminDashboard />,
+    path: '/admin',
+    element: <AdminLayout />, // Sidebar layout for all admin pages
+    children: [
+      { path: 'dashboard', element: <AdminDashboard /> },
+      { path: 'products', element: <ProductManagement /> },
+      { path: 'categories', element: <CategoryManagement /> },
+      { path: 'admins', element: <AdminManagement /> },
+    ],
   },
 ]);
 
