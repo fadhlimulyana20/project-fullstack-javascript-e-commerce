@@ -8,6 +8,9 @@ import './style.css';
 import HomePage from './HomePage.jsx';
 import AboutPage from './AboutPage.jsx';
 
+import AdminLogin from './AdminLogin.jsx';
+import AdminRegister from './AdminRegister.jsx';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -16,6 +19,14 @@ const router = createBrowserRouter([
   {
     path: '/about',
     element: <AboutPage />,
+  },
+  {
+    path: '/admin/login',
+    element: <AdminLogin />,
+  },
+  {
+    path: '/admin/register',
+    element: <AdminRegister />,
   },
 ]);
 

@@ -6,9 +6,10 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 
+
 // Routes
-// const userRoutes = require('./src/routes/userRoutes');
-// app.use('/api/users', userRoutes);
+const adminAuthRoutes = require('./src/routes/adminAuth');
+app.use('/api/admin', adminAuthRoutes);
 
 app.get('/', (req, res) => {
 	res.send('API is running');
