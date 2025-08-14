@@ -11,6 +11,8 @@ import AboutPage from './AboutPage.jsx';
 import AdminLogin from './AdminLogin.jsx';
 import AdminRegister from './AdminRegister.jsx';
 
+import AdminDashboard from './AdminDashboard.jsx';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -27,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: '/admin/register',
     element: <AdminRegister />,
+  },
+  {
+    path: '/admin/dashboard',
+    element: <AdminDashboard />,
   },
 ]);
 

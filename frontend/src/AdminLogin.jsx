@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('admin_token');
+    if (token) {
+      navigate('/admin/dashboard');
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,8 +29,8 @@ const AdminLogin = () => {
         return;
       }
       localStorage.setItem('admin_token', data.token);
-      // Redirect to dashboard or homepage
-      window.location.href = '/';
+      // Redirect to dashboard
+      navigate('/admin/dashboard');
     } catch (err) {
       setError('Server error');
     }
