@@ -6,6 +6,7 @@ import {
   updateProduct,
   deleteProduct,
 } from "./apiProducts";
+import { fetchCategories } from "./apiCategories";
 
 const initialForm = {
   name: "",
@@ -13,10 +14,13 @@ const initialForm = {
   price: "",
   stock: "",
   image_url: "",
+  category_id: "",
 };
 
 const ProductManagement = () => {
+
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [form, setForm] = useState(initialForm);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -33,8 +37,18 @@ const ProductManagement = () => {
     setLoading(false);
   };
 
+  const loadCategories = async () => {
+    try {
+      const data = await fetchCategories();
+      setCategories(data);
+    } catch (e) {
+      setCategories([]);
+    }
+  };
+
   useEffect(() => {
     loadProducts();
+    loadCategories();
   }, []);
 
   const handleChange = (e) => {
@@ -66,6 +80,7 @@ const ProductManagement = () => {
       price: product.price,
       stock: product.stock,
       image_url: product.image_url || "",
+      category_id: product.category_id || "",
     });
     setEditingId(product.id);
   };
@@ -87,6 +102,18 @@ const ProductManagement = () => {
       <h1 className="text-3xl font-bold mb-4 text-gray-800">Product Management</h1>
       <div className="w-full max-w-2xl bg-white rounded-lg shadow p-8 flex flex-col items-center">
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4 mb-8">
+          <select
+            className="border rounded px-3 py-2"
+            name="category_id"
+            value={form.category_id}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Pilih Kategori</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>{cat.name}</option>
+            ))}
+          </select>
           <input
             className="border rounded px-3 py-2"
             name="name"
@@ -164,34 +191,47 @@ const ProductManagement = () => {
             <table className="w-full text-left border">
               <thead>
                 <tr className="bg-gray-100">
+                  <th className="p-2">Gambar</th>
                   <th className="p-2">Nama</th>
+                  <th className="p-2">Kategori</th>
                   <th className="p-2">Harga</th>
                   <th className="p-2">Stok</th>
                   <th className="p-2">Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                {products.map((p) => (
-                  <tr key={p.id} className="border-t">
-                    <td className="p-2">{p.name}</td>
-                    <td className="p-2">Rp {Number(p.price).toLocaleString()}</td>
-                    <td className="p-2">{p.stock}</td>
-                    <td className="p-2 flex gap-2">
-                      <button
-                        className="bg-yellow-400 px-3 py-1 rounded text-white hover:bg-yellow-500"
-                        onClick={() => handleEdit(p)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="bg-red-600 px-3 py-1 rounded text-white hover:bg-red-700"
-                        onClick={() => handleDelete(p.id)}
-                      >
-                        Hapus
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {products.map((p) => {
+                  const category = categories.find((cat) => cat.id === p.category_id);
+                  return (
+                    <tr key={p.id} className="border-t">
+                      <td className="p-2">
+                        {p.image_url ? (
+                          <img src={p.image_url} alt={p.name} className="w-16 h-16 object-cover rounded" />
+                        ) : (
+                          <span className="text-gray-400 italic">Tidak ada</span>
+                        )}
+                      </td>
+                      <td className="p-2">{p.name}</td>
+                      <td className="p-2">{category ? category.name : <span className="text-gray-400 italic">-</span>}</td>
+                      <td className="p-2">Rp {Number(p.price).toLocaleString()}</td>
+                      <td className="p-2">{p.stock}</td>
+                      <td className="p-2 flex gap-2">
+                        <button
+                          className="bg-yellow-400 px-3 py-1 rounded text-white hover:bg-yellow-500"
+                          onClick={() => handleEdit(p)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="bg-red-600 px-3 py-1 rounded text-white hover:bg-red-700"
+                          onClick={() => handleDelete(p.id)}
+                        >
+                          Hapus
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           )}
