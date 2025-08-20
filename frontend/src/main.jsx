@@ -5,9 +5,11 @@ import {
   RouterProvider,
 } from 'react-router';
 import './style.css';
+
 import HomePage from './HomePage.jsx';
 import AboutPage from './AboutPage.jsx';
 import ProductDetail from './ProductDetail.jsx';
+import CartPage from './CartPage.jsx';
 
 import AdminLogin from './AdminLogin.jsx';
 import AdminRegister from './AdminRegister.jsx';
@@ -23,6 +25,10 @@ import AdminLayout from './AdminLayout.jsx';
 
 
 const router = createBrowserRouter([
+  {
+    path: '/cart',
+    element: <CartPage />,
+  },
   {
     path: '/',
     element: <HomePage />,
