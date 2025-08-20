@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -19,9 +20,10 @@ const ProductList = () => {
           <div className="col-span-4 text-center text-gray-500">Tidak ada produk.</div>
         ) : (
           products.map((product) => (
-            <div
+            <Link
+              to={`/product/${product.id}`}
               key={product.id}
-              className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center hover:shadow-lg transition-shadow"
+              className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center hover:shadow-lg transition-shadow cursor-pointer"
             >
               {/* Gambar produk jika ada */}
               {(product.image_url || product.imageUrl) && (
@@ -35,7 +37,7 @@ const ProductList = () => {
               )}
               <h3 className="text-lg font-semibold mb-2 text-center">{product.name}</h3>
               <p className="text-gray-700 font-bold text-center">Rp{product.price.toLocaleString()}</p>
-            </div>
+            </Link>
           ))
         )}
       </div>
