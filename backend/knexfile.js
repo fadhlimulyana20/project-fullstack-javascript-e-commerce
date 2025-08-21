@@ -1,12 +1,14 @@
+require('dotenv').config();
+
 module.exports = {
   development: {
-    client: 'mysql2',
+    client: process.env.DB_CLIENT || 'mysql2',
     connection: {
-      host: '127.0.0.1',
-      user: 'root',
-      password: '', // ganti sesuai kebutuhan
-      database: 'toko-online-db',
-      port: 3306 // ganti sesuai port MySQL jika berbeda
+      host: process.env.DB_HOST || '127.0.0.1',
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD || '',
+      database: process.env.DB_NAME || 'toko-online-db',
+      port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306
     },
     migrations: {
       directory: './migrations'
