@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
+import { createOrder } from './apiOrders';
 
 const CartPage = () => {
   const [cart, setCart] = useState([]);
@@ -24,6 +25,38 @@ const CartPage = () => {
   };
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  // State untuk data pembeli
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
+
+  const handleCheckout = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess('');
+    try {
+      await createOrder({
+        name,
+        phone,
+        address,
+        orderItems: cart,
+        total
+      });
+      setSuccess('Pesanan berhasil dikirim!');
+      setCart([]);
+      localStorage.removeItem('cart');
+      setName(''); setPhone(''); setAddress('');
+    } catch (err) {
+      setError('Gagal mengirim pesanan. Pastikan data sudah benar.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (cart.length === 0) {
     return (
@@ -80,6 +113,27 @@ const CartPage = () => {
           </tbody>
         </table>
         <div className="text-right font-bold text-xl mb-4">Total: Rp{total.toLocaleString('id-ID')}</div>
+
+        <form onSubmit={handleCheckout} className="bg-gray-50 p-4 rounded shadow max-w-lg mx-auto">
+          <h2 className="text-lg font-semibold mb-2">Data Diri Pembeli</h2>
+          <div className="mb-2">
+            <label className="block mb-1">Nama</label>
+            <input type="text" className="w-full border rounded px-2 py-1" value={name} onChange={e => setName(e.target.value)} required />
+          </div>
+          <div className="mb-2">
+            <label className="block mb-1">No WA</label>
+            <input type="text" className="w-full border rounded px-2 py-1" value={phone} onChange={e => setPhone(e.target.value)} required />
+          </div>
+          <div className="mb-2">
+            <label className="block mb-1">Alamat Lengkap</label>
+            <textarea className="w-full border rounded px-2 py-1" value={address} onChange={e => setAddress(e.target.value)} required />
+          </div>
+          {error && <div className="text-red-500 mb-2">{error}</div>}
+          {success && <div className="text-green-600 mb-2">{success}</div>}
+          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded" disabled={loading}>
+            {loading ? 'Memproses...' : 'Checkout & Simpan Pesanan'}
+          </button>
+        </form>
       </div>
     </>
   );
