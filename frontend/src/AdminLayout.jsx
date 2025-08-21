@@ -6,6 +6,7 @@ const adminMenu = [
   { label: "Manajemen Produk", path: "/admin/products" },
   { label: "Manajemen Kategori", path: "/admin/categories" },
   { label: "Manajemen Admin", path: "/admin/admins" },
+  { label: "Manajemen Order", path: "/admin/orders" },
 ];
 
 const AdminLayout = () => {

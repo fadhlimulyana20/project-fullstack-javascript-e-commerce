@@ -1,3 +1,31 @@
+// PATCH /api/orders/:id/status
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const allowedStatus = ['Dipesan', 'Sudah Dibayar', 'Sudah dikirim'];
+    if (!allowedStatus.includes(status)) {
+      return res.status(400).json({ message: 'Status tidak valid.' });
+    }
+    const updated = await Order.updateStatus(id, status);
+    if (updated === 0) {
+      return res.status(404).json({ message: 'Pesanan tidak ditemukan.' });
+    }
+    res.json({ message: 'Status pesanan berhasil diubah.' });
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal mengubah status pesanan', error: err.message });
+  }
+};
+// GET /api/orders
+exports.getAllOrders = async (req, res) => {
+  try {
+    // Join orders dengan customers
+    const orders = await require('../models/order').getAllWithCustomer();
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ message: 'Gagal mengambil data order', error: err.message });
+  }
+};
 const Customer = require('../models/customer');
 const Order = require('../models/order');
 

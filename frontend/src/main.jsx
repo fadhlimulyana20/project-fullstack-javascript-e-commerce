@@ -22,6 +22,8 @@ import CategoryManagement from './CategoryManagement.jsx';
 import AdminManagement from './AdminManagement.jsx';
 import AdminLayout from './AdminLayout.jsx';
 
+import OrderManagement from './OrderManagement.jsx';
+
 
 
 const router = createBrowserRouter([
@@ -57,6 +59,7 @@ const router = createBrowserRouter([
       { path: 'products', element: <ProductManagement /> },
       { path: 'categories', element: <CategoryManagement /> },
       { path: 'admins', element: <AdminManagement /> },
+  { path: 'orders', element: <OrderManagement /> },
     ],
   },
 ]);
